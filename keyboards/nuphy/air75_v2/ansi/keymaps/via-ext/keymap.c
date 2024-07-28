@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	KC_TAB, 	KC_Q,   	KC_W,   	KC_E,  		KC_R,   	KC_T,   	KC_Y,   	KC_U,   	KC_I,   	KC_O,  		KC_P,   	KC_LBRC,	KC_RBRC, 				KC_BSLS,	KC_PGDN,
 	KC_EXT, 	KC_A,   	KC_S,   	KC_D,  		KC_F,   	KC_G,   	KC_H,   	KC_J,   	KC_K,   	KC_L,  		KC_SCLN,	KC_QUOT, 	 						KC_ENT,		KC_HOME,
 	KC_LSFT,				KC_Z,   	KC_X,   	KC_C,  		KC_V,   	KC_B,   	KC_N,   	KC_M,   	KC_COMM,	KC_DOT,		KC_SLSH,				KC_RSFT,	KC_UP,		KC_END,
-	KC_LCTL,	KC_LGUI,	KC_LALT,										KC_SPC, 							KC_RALT,	MO(4),   	KC_RCTL,				KC_LEFT,	KC_DOWN,    KC_RGHT),
+	KC_LCTL,	KC_LGUI,	KC_LALT,										KC_SPC, 							MO(7),  	MO(4),   	KC_RCTL,				KC_LEFT,	KC_DOWN,    KC_RGHT),
 
 // layer win Colemak-DH
 // Rewrite some function keys to prevent fallbacking to the mac layer
@@ -56,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,	_______, 	_______, 	KC_F,    	KC_P,    	KC_B,    	KC_J,    	KC_L,    	KC_U,    	KC_Y,    	KC_SCLN, 	_______, 	_______, 				_______, 	_______,
     KC_EXT, 	_______, 	KC_R,    	KC_S,    	KC_T,    	_______, 	KC_M,    	KC_N,    	KC_E,    	KC_I,    	KC_O,    	_______, 							_______, 	_______,
     _______,				KC_X,    	KC_C,    	KC_D,    	KC_V,    	KC_Z,    	KC_K,    	KC_H,    	_______, 	_______, 	_______, 				_______, 	_______, 	_______,
-    KC_LCTL,	KC_LGUI,	KC_LALT, 										_______, 							KC_RALT,	MO(4),   	KC_RCTL, 				_______, 	_______, 	_______),
+    KC_LCTL,	KC_LGUI,	KC_LALT, 										_______, 							MO(7),  	MO(4),   	KC_RCTL, 				_______, 	_______, 	_______),
 
 
 // layer win Fn
@@ -85,4 +85,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	_______,	KC_LALT,   	KC_LGUI,	KC_LSFT,	KC_LCTL,	KC_RALT,	KC_PGDN,	KC_LEFT,	KC_DOWN,	KC_RGHT,	KC_DEL, 	KC_APP, 	 						_______,	_______,
 	_______,				KC_CUT, 	KC_COPY,	KC_LGUI,	KC_PSTE,	S(KC_Z),	_______,	KC_BSPC,	SIDE_SPD,	SIDE_SPI,	_______,				_______,	SIDE_VAI,	_______,
 	_______,	_______,	_______,										KC_ENT, 							_______,	MO(5),   	_______,				SIDE_MOD,	SIDE_VAD,   SIDE_HUI),
+
+// Symbols layer
+[7] = LAYOUT_ansi_84(
+	_______, 	KC_BRID,   	KC_BRIU,    _______,  	_______,   	_______,   	_______,   	KC_MPRV,	KC_MPLY,	KC_MNXT,	KC_MUTE,	KC_VOLD, 	KC_VOLU,	_______,	_______,	_______,
+	_______, 	_______,	_______,  	_______,	_______,  	_______,  	_______,  	_______,  	_______,  	_______,  	_______, 	_______, 	_______, 				_______,	_______,
+	_______, 	KC_EXLM,   	KC_AT,  	KC_HASH,	KC_DLR, 	KC_PERC,	KC_EQL, 	KC_P7,  	KC_P8,  	KC_P9,  	KC_PLUS,	_______,	_______, 				_______,	_______,
+	_______,	KC_UNDS,   	KC_LBRC,	KC_LCBR,	KC_LPRN,	KC_PIPE,	KC_ASTR,	KC_P4,  	KC_P5,  	KC_P6,  	KC_MINUS, 	KC_APP, 	 						_______,	_______,
+	_______,				KC_RBRC, 	KC_RCBR,	KC_RPRN,	KC_TILD,	KC_AMPR,	KC_P0,  	KC_P1,  	KC_P2,  	KC_P3,  	KC_BSLS,				_______,	SIDE_VAI,	_______,
+	_______,	_______,	_______,										_______,							MO(7),  	_______,	_______,				SIDE_MOD,	SIDE_VAD,   SIDE_HUI),
 };

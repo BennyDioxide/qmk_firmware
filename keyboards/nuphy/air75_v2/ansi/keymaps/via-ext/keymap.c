@@ -101,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	_______, 	KC_BRID,   	KC_BRIU,    _______,  	_______,   	_______,   	_______,   	KC_MPRV,	KC_MPLY,	KC_MNXT,	KC_MUTE,	KC_VOLD, 	KC_VOLU,	_______,	_______,	_______,
 	_______, 	_______,	_______,  	_______,	_______,  	_______,  	_______,  	_______,  	_______,  	_______,  	_______, 	_______, 	_______, 				_______,	_______,
 	_______, 	KC_EXLM,   	KC_AT,  	KC_HASH,	KC_DLR, 	KC_PERC,	KC_EQL, 	KC_P7,  	KC_P8,  	KC_P9,  	KC_PLUS,	_______,	_______, 				_______,	_______,
-	_______,	KC_UNDS,   	KC_LBRC,	KC_LCBR,	KC_LPRN,	KC_PIPE,	KC_ASTR,	KC_P4,  	KC_P5,  	KC_P6,  	KC_MINUS, 	KC_APP, 	 						_______,	_______,
+	_______,	KC_UNDS,   	KC_LBRC,	KC_LCBR,	KC_LPRN,	KC_PIPE,	KC_ASTR,	KC_P4,  	KC_P5,  	KC_P6,  	KC_MINUS, 	KC_NUM, 	 						_______,	_______,
 	_______,				KC_RBRC, 	KC_RCBR,	KC_RPRN,	KC_TILD,	KC_AMPR,	KC_P0,  	KC_P1,  	KC_P2,  	KC_P3,  	KC_BSLS,				_______,	SIDE_VAI,	_______,
 	_______,	_______,	_______,										_______,							MO(7),  	_______,	_______,				SIDE_MOD,	SIDE_VAD,   SIDE_HUI),
 };

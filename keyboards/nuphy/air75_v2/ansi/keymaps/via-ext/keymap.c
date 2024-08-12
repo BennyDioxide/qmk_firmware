@@ -24,6 +24,7 @@ enum win_keymap_layer {
     LY_FN,
     LY_SIDE,
     LY_EXT,
+    LY_MOUS,
     LY_SYM,
 };
 
@@ -93,8 +94,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	_______, 	KC_F1,  	KC_F2,  	KC_F3, 		KC_F4,  	KC_F5,  	KC_F6,  	KC_F7,  	KC_F8,  	KC_F9,  	KC_F10, 	KC_F11, 	KC_F12, 				_______,	_______,
 	_______, 	KC_ESC,   	KC_BTN4,	KC_FIND,	KC_BTN5,	_______,	KC_PGUP,	KC_HOME,	KC_UP,  	KC_END, 	KC_CAPS,	_______,	_______, 				_______,	_______,
 	MO(LY_EXT),	KC_LALT,   	KC_LGUI,	KC_LSFT,	KC_LCTL,	KC_RALT,	KC_PGDN,	KC_LEFT,	KC_DOWN,	KC_RGHT,	KC_DEL, 	KC_APP, 	 						_______,	_______,
-	_______,				KC_CUT, 	KC_COPY,	KC_LGUI,	KC_PSTE,	C(KC_Z),	_______,	KC_BSPC,	KC_TAB, 	SIDE_SPI,	_______,				_______,	SIDE_VAI,	_______,
+	MO(LY_MOUS),				KC_CUT, 	KC_COPY,	KC_LGUI,	KC_PSTE,	C(KC_Z),	_______,	KC_BSPC,	KC_TAB, 	SIDE_SPI,	_______,				_______,	SIDE_VAI,	_______,
 	_______,	_______,	_______,										KC_ENT, 							_______,	_______,	_______,				SIDE_MOD,	SIDE_VAD,   SIDE_HUI),
+
+// Mouse layer
+[LY_MOUS] = LAYOUT_ansi_84(
+	_______, 	_______,	_______,	_______,	_______,	_______,	_______,	_______,  	_______,	_______,	_______, 	_______, 	_______, 	_______,	_______,	_______,
+	_______, 	_______,	_______,	_______,  	_______,  	_______,  	_______,  	_______,  	_______,	_______,	_______, 	_______, 	_______, 				_______,	_______,
+	_______, 	_______,	KC_BTN4,	KC_BTN3,	KC_BTN5,	_______,	KC_WH_U,	KC_BTN1,	KC_MS_U,	KC_BTN2,	_______,	_______,	_______, 				_______,	_______,
+	_______,	_______,	_______,	_______,	_______,	_______,	KC_WH_D,	KC_MS_L,	KC_MS_D,	KC_MS_R,	KC_DEL, 	KC_APP, 	 						_______,	_______,
+	MO(LY_MOUS),				_______, 	_______,	_______,	_______,	C(KC_Z),	_______,	_______,	_______, 	_______,	_______,				_______,	_______,	_______,
+	_______,	_______,	_______,										_______, 							_______,	_______,	_______,				_______,	_______,   _______),
 
 // Symbols layer
 [LY_SYM] = LAYOUT_ansi_84(

@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+extern MidiDevice midi_device;
 
 enum win_keymap_layer {
     LY_QWER = 2,
@@ -26,10 +27,16 @@ enum win_keymap_layer {
     LY_EXT,
     LY_MOUS,
     LY_SYM,
+    LY_MIDI,
+};
+
+enum keycodes {
+    TG_MIDI = SAFE_RANGE,
 };
 
 #define KC_EXT (LT(LY_EXT, KC_CAPS))
 
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // layer Mac
@@ -57,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	KC_TAB, 	KC_Q,   	KC_W,   	KC_E,  		KC_R,   	KC_T,   	KC_Y,   	KC_U,   	KC_I,   	KC_O,  		KC_P,   	KC_LBRC,	KC_RBRC, 				KC_BSLS,	KC_PGDN,
 	KC_EXT, 	KC_A,   	KC_S,   	KC_D,  		KC_F,   	KC_G,   	KC_H,   	KC_J,   	KC_K,   	KC_L,  		KC_SCLN,	KC_QUOT, 	 						KC_ENT,		KC_HOME,
 	KC_LSFT,				KC_Z,   	KC_X,   	KC_C,  		KC_V,   	KC_B,   	KC_N,   	KC_M,   	KC_COMM,	KC_DOT,		KC_SLSH,				KC_RSFT,	KC_UP,		KC_END,
-	KC_LCTL,	KC_LGUI,	KC_LALT,										KC_SPC, 							MO(LY_SYM), 	MO(LY_FN),   	KC_RCTL,				KC_LEFT,	KC_DOWN,    KC_RGHT),
+	KC_LCTL,	KC_LGUI,	KC_LALT,										KC_SPC, 							MO(LY_SYM), 	MO(LY_FN),   	TG_MIDI,				KC_LEFT,	KC_DOWN,    KC_RGHT),
 
 // layer win Colemak-DH
 // Rewrite some function keys to prevent fallbacking to the mac layer
@@ -67,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,	_______, 	_______, 	KC_F,    	KC_P,    	KC_B,    	KC_J,    	KC_L,    	KC_U,    	KC_Y,    	KC_SCLN, 	_______, 	_______, 				_______, 	_______,
     KC_EXT, 	_______, 	KC_R,    	KC_S,    	KC_T,    	_______, 	KC_M,    	KC_N,    	KC_E,    	KC_I,    	KC_O,    	_______, 							_______, 	_______,
     _______,				KC_X,    	KC_C,    	KC_D,    	KC_V,    	KC_Z,    	KC_K,    	KC_H,    	_______, 	_______, 	_______, 				_______, 	_______, 	_______,
-    KC_LCTL,	KC_LGUI,	KC_LALT, 										_______, 							MO(LY_SYM),  	MO(LY_FN),   	KC_RCTL, 				_______, 	_______, 	_______),
+    KC_LCTL,	KC_LGUI,	KC_LALT, 										_______, 							MO(LY_SYM),  	MO(LY_FN),   	TG_MIDI, 				_______, 	_______, 	_______),
 
 
 // layer win Fn
@@ -114,4 +121,81 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	_______,	KC_UNDS,   	KC_LBRC,	KC_LCBR,	KC_LPRN,	KC_PIPE,	KC_ASTR,	KC_P4,  	KC_P5,  	KC_P6,  	KC_MINUS, 	KC_NUM, 	 						_______,	_______,
 	_______,				KC_RBRC, 	KC_RCBR,	KC_RPRN,	KC_TILD,	KC_AMPR,	KC_P0,  	KC_P1,  	KC_P2,  	KC_P3,  	KC_BSLS,				_______,	SIDE_VAI,	_______,
 	_______,	_______,	_______,										_______,							MO(7),  	_______,	_______,				SIDE_MOD,	SIDE_VAD,   SIDE_HUI),
+// Midi Layer
+[LY_MIDI] = LAYOUT_ansi_84(
+	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,	_______,
+	_______,	_______,	MI_Db3, 	MI_Eb3, 	_______,	MI_Fs3, 	MI_Ab3, 	MI_Bb3, 	_______,	MI_Db4, 	MI_Eb4, 	_______,	_______,				_______,	_______,
+	_______,	MI_C3,  	MI_D3,  	MI_E3,  	MI_F3,  	MI_G3,  	MI_A3,  	MI_B3,  	MI_C4,  	MI_D4,  	MI_E4,  	_______,	_______,				_______,	_______,
+	_______,	_______,	MI_Db2, 	MI_Eb2, 	_______,	MI_Fs2, 	MI_Ab2, 	MI_Bb2, 	_______,	MI_Db3, 	MI_Eb3, 	_______,							_______,	_______,
+	_______,				MI_C2,  	MI_D2,  	MI_E2,  	MI_F2,  	MI_G2,  	MI_A2,  	MI_B2,  	MI_C3,  	MI_D3,  	MI_E3,				_______,	_______,	_______,
+	_______,	_______,	_______,										_______,							_______,	_______,	TG_MIDI,				_______,	_______,	_______),
+
 };
+// clang-format on
+
+#include "rgb_palette.h"
+#define LIGHT_SHOW_CHANNEL 5
+#define KEY_COUNT 84
+
+// A map from midi note to velocity, which represents the rgb color
+uint8_t midi_rgb[KEY_COUNT] = {0};
+
+void note_rgb(uint8_t chan, uint8_t note, uint8_t vel) {
+    if (chan != LIGHT_SHOW_CHANNEL || !layer_state_is(LY_MIDI)) return;
+    midi_rgb[note % KEY_COUNT] = vel;
+}
+
+void noteon_callback(MidiDevice* device, uint8_t chan, uint8_t note, uint8_t vel) {
+    note_rgb(chan, note, vel);
+}
+
+void noteoff_callback(MidiDevice* device, uint8_t chan, uint8_t note, uint8_t vel) {
+    note_rgb(chan, note, 0);
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (layer_state_is(LY_MIDI)) {
+        for (uint8_t i = led_min; i < led_max; i++) {
+            rgb_color_t color = rgb_palette[midi_rgb[i]];
+            rgb_matrix_set_color(i, color.r, color.g, color.b);
+        }
+    }
+    return false;
+}
+
+void keyboard_post_init_user(void) {
+    //  Set octave to 0
+    midi_config.octave = QK_MIDI_OCTAVE_0 - MIDI_OCTAVE_MIN;
+
+    // avoid using 127 since it is used as a special number in some sound sources.
+    midi_config.velocity = 117;
+    midi_register_noteon_callback(&midi_device, noteon_callback);
+    midi_register_noteoff_callback(&midi_device, noteoff_callback);
+    midi_register_pitchbend_callback(&midi_device, noteon_callback);
+};
+
+// Add the behaviour of  new keycodes
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+    switch (keycode) {
+        case TG_MIDI:
+            // Our logic will happen on presses, nothing is done on releases
+            if (!record->event.pressed) {
+                // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
+                return false;
+            }
+
+            layer_invert(LY_MIDI);
+
+            if (layer_state_is(LY_MIDI)) {
+                memset(midi_rgb, 0, sizeof(midi_rgb));
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
+            } else {
+                rgb_matrix_mode(RGB_MATRIX_DEFAULT_MODE);
+            }
+            return false;
+
+        // Process other keycodes normally
+        default:
+            return true;
+    }
+}
